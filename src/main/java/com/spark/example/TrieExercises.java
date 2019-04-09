@@ -1,66 +1,76 @@
 package com.spark.example;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TrieExercises {
 
     Trie root;
-    TrieExercises(){
-        this.root = new Trie(new HashMap<>(),false);
+
+    TrieExercises() {
+        this.root = new Trie(new HashMap<>(), false);
     }
 
     public static void main(String[] args) {
 
 
-        String str1 = "peter", str2 = "pet", str3 = "pickoo";
-        TrieExercises trieExercises=new TrieExercises();
-        trieExercises.insert(str1);
+        String str1 = "peter", str2 = "pet", str3 = "kumar";
+        TrieExercises trieExercises = new TrieExercises();
+        trieExercises.insert(str1, str2, str3);
         trieExercises.displayTrie();
 
 
     }
 
-    Trie insertStringToTrie(String str,Trie node) {
 
-        if(str.length()==0) return new Trie(null,true);
-        Map<Character,Trie> nodeMap = new HashMap<Character, Trie>();
+    Trie insertStringToTrie(String str, Trie node) {
+        Trie newTrie = new Trie(new HashMap<Character, Trie>(), false);
+        if (str.length() == 0){
+            node.isEndOfString=true;
+            return node;
+        }
+        Character ch= str.charAt(0);
+        if (node.mapOfChars.containsKey(ch)) {
 
-        if(node.mapOfChars.containsKey(str.charAt(0))){
-          Trie trie=   node.mapOfChars.get(str.charAt(0));
-
+            newTrie =  node.mapOfChars.get(ch);
+       //  return    insertStringToTrie(str.substring(1), node.mapOfChars.get(str.charAt(0)));
+        }else{
+            node.mapOfChars.put(str.charAt(0),newTrie);
+          //return   insertStringToTrie(str.substring(1),newTrie);
         }
 
-        Trie result =  node.mapOfChars.computeIfAbsent(str.charAt(0),(ch) -> insertStringToTrie(str.substring(1),node));
-        return result;
-
+        return    insertStringToTrie(str.substring(1), newTrie);
     }
 
-    void insert(String str){
-        insertStringToTrie(str,root);
-
+    void insert(String... words) {
+        Arrays.stream(words).forEach(word -> {
+            insertStringToTrie(word, root);
+        });
     }
 
-    void displayTrie(){
+    void displayTrie() {
 
-        for(Map.Entry<Character,Trie> entry :root.mapOfChars.entrySet()){
+        for (Map.Entry<Character, Trie> entry : root.mapOfChars.entrySet()) {
 
             System.out.print(entry.getKey());
             displayTrie(entry.getValue());
-
-        }
-    }
-
-    void displayTrie(Trie trie){
-
-        if(trie.isEndOfString) {
             System.out.println();
-            return;
+
         }
-        for(Map.Entry<Character,Trie> entry :trie.mapOfChars.entrySet()){
+    }
+
+    void displayTrie(Trie trie) {
+
+        if (trie.isEndOfString) {
+            System.out.print("|");
+
+        }
+        for (Map.Entry<Character, Trie> entry : trie.mapOfChars.entrySet()) {
 
             System.out.print(entry.getKey());
             displayTrie(entry.getValue());
+
 
         }
 
