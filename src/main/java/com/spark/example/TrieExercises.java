@@ -24,11 +24,11 @@ public class TrieExercises {
     }
 
 
-    Trie insertStringToTrie(String str, Trie node) {
+    void insertStringToTrie(String str, Trie node) {
         Trie newTrie = new Trie(new HashMap<Character, Trie>(), false);
         if (str.length() == 0){
-            node.isEndOfString=true;
-            return node;
+            node.isEndOfString=true;return;
+           // return node;
         }
         Character ch= str.charAt(0);
         if (node.mapOfChars.containsKey(ch)) {
@@ -40,7 +40,7 @@ public class TrieExercises {
           //return   insertStringToTrie(str.substring(1),newTrie);
         }
 
-        return    insertStringToTrie(str.substring(1), newTrie);
+            insertStringToTrie(str.substring(1), newTrie);
     }
 
     void insert(String... words) {
@@ -81,7 +81,7 @@ public class TrieExercises {
 
 class Trie {
     Map<Character, Trie> mapOfChars;
-    boolean isEndOfString = false;
+    boolean isEndOfString ;
 
     public Trie(Map<Character, Trie> mapOfChars, boolean isEndOfString) {
         this.mapOfChars = mapOfChars;
